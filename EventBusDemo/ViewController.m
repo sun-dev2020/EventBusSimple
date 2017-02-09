@@ -37,6 +37,4 @@
 }
 
 
-- (IBAction)loginBtn:(id)sender {
-}
 @end
