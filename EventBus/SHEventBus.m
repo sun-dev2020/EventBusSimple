@@ -66,7 +66,12 @@
     
     for (NSObject *obj in allReceiverAry) {
         if ([obj respondsToSelector:selector]) {
-            [obj performSelector:selector withObject:receiver];
+            
+            IMP imp = [obj methodForSelector:selector];     // 查找对应的selector，得到函数指针
+            void (*function)(id ,SEL ,id) = (void *)imp;        // 转换函数指针（id ,SEL ,...）第一个id是消息的接受者，第二个是函数 第三个是传递的参数
+            function(obj, selector,receiver);
+            
+//            [obj performSelector:selector withObject:receiver];     //这样些编译器会因为无法检查是否存在这个selector报警告
         }
     }
     

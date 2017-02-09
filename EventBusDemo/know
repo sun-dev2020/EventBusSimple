@@ -1,0 +1,40 @@
+
+
+1，IMP－指向实际执行函数体的函数指针
+
+#if !OBJC_OLD_DISPATCH_PROTOTYPES
+typedef void (*IMP)(void /* id, SEL, ... */ );
+#else
+typedef id (*IMP)(id, SEL, ...);
+#endif
+
+这个函数体前两个参数是 id（消息接受者，也就是对象），以及SEL（方法的名字）
+
+
+
+2，method/objc_method
+
+method - 指向Objective C中的方法的指针
+
+typedef struct objc_method *Method;
+
+struct objc_method {
+SEL method_name
+char *method_types
+IMP method_imp
+}
+
+4，objc_selector
+透明的数据结构，可以理解为C String
+
+5，SEL
+
+源代码定义
+typedef struct objc_selector *SEL;
+
+也就是说，SEL是指向一个C String的指针。
+
+
+6，_cmd
+
+SEL 类型的一个变量，Objective C的函数的前两个隐藏参数为self 和 _cmd
