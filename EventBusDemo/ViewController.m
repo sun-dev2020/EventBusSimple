@@ -42,7 +42,7 @@
     
     FMDatabase *dataBase = [FMDatabase databaseWithPath:fileName];
     if ([dataBase open]) {
-        BOOL result = [dataBase executeUpdate:@"CREATE TABLE IF NOT EXISTS user_db (userId integer NOT NULL, name text NOT NULL, city text NOT NULL);"];
+        BOOL result = [dataBase executeUpdate:@"CREATE TABLE IF NOT EXISTS user_db (userId integer NOT NULL, name text NOT NULL, city text NOT NULL, boy bool NOT NULL);"];
         if (result) {
             NSLog(@" 创建表成功 ");
             self.db = dataBase;
@@ -55,13 +55,13 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 //    [self insert];
     
-    [self update];
+//    [self update];
     
-    [self delete];
+//    [self delete];
     
     [self query];
     
-    [self dropDataBase];
+//    [self dropDataBase];
 }
 
 - (void)insert{
@@ -71,7 +71,7 @@
         model.name = [NSString stringWithFormat:@"name%d",i];
         model.city = [NSString stringWithFormat:@"city%d",i];
         
-        BOOL result = [self.db executeUpdate:@"INSERT INTO user_db (userId , name ,city) VALUES (?,?,?);",@(model.userId),model.name,model.city];
+        BOOL result = [self.db executeUpdate:@"INSERT INTO user_db (userId , name ,city ,boy ) VALUES (?,?,?,?);",@(model.userId),model.name,model.city ,@(YES)];
         NSLog(@" insert result %d ",result);
     }
 }
