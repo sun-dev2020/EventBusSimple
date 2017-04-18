@@ -16,6 +16,12 @@
 @interface ViewController ()
 
 @property (nonatomic ,strong) FMDatabase *db;
+- (IBAction)add:(id)sender;
+- (IBAction)delete:(id)sender;
+
+- (IBAction)update:(id)sender;
+- (IBAction)query:(id)sender;
+
 
 @end
 
@@ -41,27 +47,36 @@
     NSString *fileName = [docPath stringByAppendingPathComponent:@"test2.sqlite"];
     
     FMDatabase *dataBase = [FMDatabase databaseWithPath:fileName];
-    if ([dataBase open]) {
-        BOOL result = [dataBase executeUpdate:@"CREATE TABLE IF NOT EXISTS user_db (userId integer NOT NULL, name text NOT NULL, city text NOT NULL, boy bool NOT NULL);"];
-        if (result) {
-            NSLog(@" 创建表成功 ");
-            self.db = dataBase;
-            return;
+    
+    if ([dataBase open]) {      //必须open 之后再操作
+        FMResultSet *set = [dataBase executeQuery:@"select * from user_db"];
+        NSLog(@" %d ",[set columnCount]);
+        if ([set columnCount] == 0) {
+            
+            BOOL result = [dataBase executeUpdate:@"CREATE TABLE IF NOT EXISTS user_db (userId integer NOT NULL, name text NOT NULL, city text NOT NULL, boy bool NOT NULL);"];
+            if (result) {
+                NSLog(@" 创建表成功 ");
+                self.db = dataBase;
+                return;
+            }
+            NSLog(@" 创建表失败 ");
+        }else{
+            _db = dataBase;
         }
-        NSLog(@" 创建表失败 ");
+
     }
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self insert];
+//    [self insert];
     
 //    [self update];
     
 //    [self delete];
     
-    [self query];
+//    [self query];
     
-    [self update];
+//    [self update];
 //    [self dropDataBase];
 }
 
@@ -78,7 +93,9 @@
 }
 
 - (void)query{
+    
     FMResultSet *resultSet = [self.db executeQuery:@"SELECT * FROM user_db"];
+    NSLog(@"  keys  %@",[resultSet columnNameToIndexMap]);
     
     resultSet = [self.db executeQuery:@"SELECT * FROM user_db where userId = 8"];
     while ([resultSet next]) {
@@ -140,6 +157,29 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (IBAction)add:(id)sender {
+    FMResultSet *reultSet = [_db executeQuery:@"SELECT * FROM user_db"];
+    NSLog(@" dic %@",[reultSet stringForColumn:@"name"]);
+    
+    reultSet = [_db executeQuery:@"select name from user_db"];
+    NSLog(@" dic %@",[reultSet stringForColumn:@"name"]);
+    
+
+}
+
+- (IBAction)delete:(id)sender {
+    [self delete];
+}
+
+- (IBAction)update:(id)sender {
+    [self update];
+}
+
+- (IBAction)query:(id)sender {
+    [self query];
 }
 
 
