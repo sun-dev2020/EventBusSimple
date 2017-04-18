@@ -53,7 +53,7 @@
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    [self insert];
+    [self insert];
     
 //    [self update];
     
@@ -61,6 +61,7 @@
     
     [self query];
     
+    [self update];
 //    [self dropDataBase];
 }
 
@@ -85,13 +86,18 @@
         int uid = [resultSet intForColumn:@"userId"];
         NSString *name = [resultSet stringForColumn:@"name"];
         NSString *city = [resultSet stringForColumn:@"city"];
-        NSLog(@" %d  %@  %@ ",uid, name , city);
+        NSLog(@" %d  %@  %@  %@",uid, name , city, [resultSet stringForColumn:@"country"]);
     }
+    
+
+    
 }
 
 - (void)update{
-   BOOL result = [self.db executeUpdate:@"update user_db set name = ? where name = ? ;",@"小明",@"name3"];
-    NSLog(@" update %d",result);
+//   BOOL result = [self.db executeUpdate:@"update user_db set name = ? where name = ? ;",@"小明",@"name3"];
+   
+   BOOL result2 = [self.db executeUpdate:@"update user_db set country = ? where userId = 8",@"china"];
+    NSLog(@" update %d",result2);
 }
 
 
@@ -105,6 +111,14 @@
     NSLog(@" drop %d",result);
 }
 
+
+/**
+ 表新加字段
+ */
+- (void)alter{
+    BOOL result = [self.db executeUpdate:@"alter table user_db add country text"];
+    NSLog(@" alter %d", result);
+}
 
 //- (void)insert
 //{
