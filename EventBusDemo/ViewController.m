@@ -106,7 +106,26 @@
         NSLog(@" %d  %@  %@  %@",uid, name , city, [resultSet stringForColumn:@"country"]);
     }
     
+    
+    //去重复值
+    FMResultSet *set = [_db executeQuery:@"select distinct name from user_db"];
+    NSLog(@" column = %@", [set columnNameToIndexMap]);
+    
+    //限制条件
+    set = [_db executeQuery:@"select * from user_db where userId>8"];
+    NSLog(@" userid > 8 = %d",[set intForColumn:@"userId"]);
 
+//    while ([set next]) {
+//        NSLog(@" userid > 8 = %d",[set intForColumn:@"userId"]);
+//    }
+    
+    [_db executeQuery:@"select TOP 5 * from user_db"];       //选择数据库前5   或者百分比
+    [_db executeQuery:@"select top 30 percent * from user_db"];
+    
+    [_db executeQuery:@"select * from user_db where name like 'na%'"];   //like 条件 %号是通配符  以na开头的name
+    
+    [_db executeQuery:@"select * from user_db where name IN (name3,name5)"];     //in 允许where语句中有多个值
+    
     
 }
 
